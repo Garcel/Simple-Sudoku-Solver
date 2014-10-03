@@ -21,7 +21,9 @@ public class Logic
         sol = new int [9][9];
       }
     
-    
+    /**
+     * 
+     */
     public void solve ()
     {
         boolean initialize [][] = new boolean [9][9];
@@ -33,6 +35,13 @@ public class Logic
         sudoku_BT(0, 0, sol, initialize);
     }
     
+    /**
+     * 
+     * @param i
+     * @param j
+     * @param sol
+     * @param initialize
+     */
     public void sudoku_BT (int i, int j, int sol [][], boolean initialize [][])
     {
         if (!initialize [i][j])
@@ -66,6 +75,13 @@ public class Logic
         }
     }
     
+    /**
+     * 
+     * @param i
+     * @param j
+     * @param sol
+     * @return
+     */
     private boolean isAchievable(int i, int j, int sol [][])
     {
         boolean valid = true;
@@ -109,9 +125,9 @@ public class Logic
     }
     
     /**
-     * Returns the
+     * Returns the row correspondence to the given position
      * 
-     * @param i the
+     * @param i the row correspondence to the given position
      * @return
      */
     private int corresp3x3 (int i)
@@ -140,6 +156,9 @@ public class Logic
         return result;
     }
     
+    /**
+     * 
+     */
     private void generate ()
     {
         int counter = 0, p, r, t, difficulty;
@@ -164,6 +183,10 @@ public class Logic
         }
     }
     
+    /**
+     * 
+     * @return
+     */
     private int setDifficulty()
     {
         final String options[]={"Easy", "Normal", "Hard", "Overkill"};
@@ -192,6 +215,9 @@ public class Logic
         return 18;
     }
     
+    /**
+     * 
+     */
     private void reset (){
     	for (int i = 0; i < 9; i++)
         	for (int j = 0; j < 9; j++)

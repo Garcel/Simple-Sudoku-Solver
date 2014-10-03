@@ -1,5 +1,7 @@
 package com.garcel.sudoku;
 
+import org.apache.log4j.Logger;
+
 import com.garcel.sudoku.gui.GUI;
 
 /**
@@ -9,6 +11,8 @@ import com.garcel.sudoku.gui.GUI;
  */
 public class Sudoku 
 {
+	private static final Logger logger = Logger.getLogger("com.garcel.sudoku.Sudoku");
+	
     private GUI gui;
     
     /**
@@ -16,7 +20,11 @@ public class Sudoku
      */
     public Sudoku ()
     {
+    	logger.info("Initializing Sudoku...");
+    	
         gui = new GUI (400, 450);
+        
+        logger.info("Sudoku initialized...");
     }
     
     /**
@@ -24,6 +32,8 @@ public class Sudoku
      */
     public static void main(String[] args) 
     {
+    	logger.info("Starting program...");
+    	
         Sudoku sudoku = new Sudoku ();
     }
 }

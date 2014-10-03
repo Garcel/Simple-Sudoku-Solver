@@ -1,0 +1,6 @@
+- Enable button functions.
+- Set colors to sudoku boxes; generated/ input numbers will show with blue color. The othes will remamain white.
+- Filter input data to avoid errors if invalid characters are fourd (letters, symbols, ...)
+- Check if all the generated sudokus have a solution (they should). If not, fix it so just completely valid sudokus are generated.
+- Improve comments.
+- Add logger support for all the remaning classes.
