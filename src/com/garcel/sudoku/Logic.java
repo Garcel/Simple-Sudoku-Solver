@@ -2,6 +2,8 @@ package com.garcel.sudoku;
 
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
+
 import com.garcel.Utils.Randoms;
 
 /**
@@ -11,6 +13,8 @@ import com.garcel.Utils.Randoms;
  */
 public class Logic
 {
+	private static final Logger logger = Logger.getLogger("com.garcel.sudoku.Logic");
+	
     private int sol [][];//Stores the sudoku "matrix"
     
     /**
@@ -18,14 +22,20 @@ public class Logic
      */
     public Logic ()
     {
+    	logger.info("Initializing Logic...");
+    	
         sol = new int [9][9];
-      }
+        
+        logger.info("Logic initialized...");
+    }
     
     /**
      * 
      */
     public void solve ()
     {
+    	logger.info("Solving sudoku...");
+    	
         boolean initialize [][] = new boolean [9][9];
         
         for (int i = 0; i < 9; i ++)
@@ -44,11 +54,14 @@ public class Logic
      */
     public void sudoku_BT (int i, int j, int sol [][], boolean initialize [][])
     {
+    	logger.debug("Running BT algorithm...");
+    	
         if (!initialize [i][j])
         {
             for (int k = 1; k < 10; k++)
             {
                 sol [i][j] = k;
+                
                 if (isAchievable(i, j, sol))
                 {
                     if ((i < 8) && (j == 8))
@@ -60,6 +73,7 @@ public class Logic
                     }
                 }
                 
+                //Rolling back changes
                 sol [i][j] = 0;
             }
         }
@@ -159,11 +173,15 @@ public class Logic
     /**
      * 
      */
-    private void generate ()
+    public void generate ()
     {
+    	logger.debug("Generating Sudoku...");
+    	
         int counter = 0, p, r, t, difficulty;
         
         difficulty = setDifficulty ();
+        
+        reset();
                 
         while (counter < difficulty)
         {
@@ -189,13 +207,15 @@ public class Logic
      */
     private int setDifficulty()
     {
+    	logger.debug("Setting difficulty...");
+    	
         final String options[]={"Easy", "Normal", "Hard", "Overkill"};
         String dif = null;
-        dif = String.valueOf(JOptionPane.showInputDialog(null, "Please select a dofficulty ","Difficulty",
+        dif = String.valueOf(JOptionPane.showInputDialog(null, "Please select a difficulty ","Difficulty",
                            JOptionPane.INFORMATION_MESSAGE, null, options, options[0]));
         
         //If cancel button is pressed, program exits
-        if (dif.length() == 4)
+        if (dif == null)
             System.exit(0);
         
         try
@@ -224,5 +244,17 @@ public class Logic
             {
         		sol [i][j] = 0;
             }
+    }
+    
+    public int [][] getSol(){
+    	logger.info("Getting solution matrix...");
+    	
+    	return sol;
+    }
+    
+    public void setSol(int [][] sol){
+    	logger.info("Setting solution matrix...");
+    	
+    	this.sol = sol;
     }
 }

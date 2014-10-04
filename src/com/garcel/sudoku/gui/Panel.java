@@ -1,15 +1,22 @@
 package com.garcel.sudoku.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 import org.apache.log4j.Logger;
 
@@ -40,7 +47,6 @@ public class Panel extends JPanel{
 	 * @param height
 	 */
 	public Panel (int width, int height){
-	   
 		logger.info("Initializing Panel...");
 		
 		/*** JPanel settings ***/
@@ -65,7 +71,36 @@ public class Panel extends JPanel{
         solve = new JButton("Solve");
         generate = new JButton("Generate");
         
-        resetBoxes();
+        //Adding boxes
+        boxes = new JTextField [9][9];
+        Font font = new Font("SansSerif", Font.BOLD, 20);
+        
+        for (int i = 0; i < 9; i ++)
+           for (int j = 0; j < 9; j ++)
+           {
+               boxes [i][j] = new JTextField ("");
+               boxes [i][j].setPreferredSize(box);
+               boxes [i][j].setHorizontalAlignment(JTextField.CENTER);
+               boxes [i][j].setFont(font);
+               
+               //Setting the bottom border to draw the sudoku grid
+               if (i == 2 || i == 5){
+            	   Border oldBorder =  boxes[i][j].getBorder();
+            	   Border border = BorderFactory.createMatteBorder(0, 0, 3, 0, Color.BLACK);
+            	   Border newBorder = BorderFactory.createCompoundBorder(border, oldBorder);
+            	   boxes[i][j].setBorder(newBorder);
+               }
+               
+               //Setting the right border to draw the sudoku grid
+               if (j == 2 || j == 5){
+            	   Border oldBorder =  boxes[i][j].getBorder();
+            	   Border border = BorderFactory.createMatteBorder(0, 0, 0, 3, Color.BLACK);
+            	   Border newBorder = BorderFactory.createCompoundBorder(border, oldBorder);
+            	   boxes[i][j].setBorder(newBorder);
+               }
+               
+               panelCenter.add (boxes [i][j]);
+           }
         
         panelBottom.add(generate);
         panelBottom.add(solve);
@@ -79,7 +114,11 @@ public class Panel extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                //logic.solve();
+            	logger.debug("Solve button pressed...");
+            	
+            	logic.setSol(getBoxes());
+            	logic.solve();
+        		setBoxes (logic.getSol(), false);
             }
         });
         
@@ -88,22 +127,57 @@ public class Panel extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                //logic.generate():    
+            	logger.debug("Generate button pressed...");
+            	
+                logic.generate();
+                resetBoxes();
+                setBoxes (logic.getSol(), true);
             }
         });
         
         logger.info("Panel initialized...");
 	}
 	
-	private void resetBoxes (){
-		boxes = new JTextField [9][9];
-        for (int i = 0; i < 9; i ++)
-           for (int j = 0; j < 9; j ++)
-           {
-               boxes [i][j] = new JTextField ("");
-               boxes [i][j].setPreferredSize(box);
-               boxes [i][j].setHorizontalAlignment(JTextField.CENTER);
-               panelCenter.add (boxes [i][j]);
-           }
+	private void setBoxes(int [][] sol, boolean changeColor){
+		logger.info("Setting Sudoku values...");
+		
+		 for (int i = 0; i < 9; i ++)
+	           for (int j = 0; j < 9; j ++)
+	           {
+	        	   if (sol[i][j] == 0){
+	        		   boxes [i][j].setText("");
+	        	   }
+	        	   else{
+	        		   boxes [i][j].setText(String.valueOf(sol[i][j]));
+	        		   if(changeColor)
+	        			   boxes[i][j].setBackground(Color.cyan);
+	        	   }
+	           }
+	}
+	
+	private int [][] getBoxes(){
+		logger.info("Getting Sudoku values...");
+		
+		int [][] sol = new int [9][9];
+		
+		 for (int i = 0; i < 9; i ++)
+	           for (int j = 0; j < 9; j ++)
+	           {
+	        	  if (!boxes[i][j].getText().equals(""))
+	        		  sol[i][j] = Integer.valueOf(boxes [i][j].getText());
+	        	  else
+	        		  sol[i][j] = 0;
+	           }
+		 
+		 return sol;
+	}
+	
+	private void resetBoxes(){
+		for (int i = 0; i < 9; i ++)
+	           for (int j = 0; j < 9; j ++)
+	           {
+	        	  boxes [i][j].setText("");
+	        	  boxes[i][j].setBackground(Color.WHITE);
+	           }
 	}
 }
