@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
@@ -37,7 +38,7 @@ public class Panel extends JPanel{
 	private Logic logic;
 	
     private JTextField boxes [][];
-    private JButton solve, generate;
+    private JButton solve, generate, check;
     private JPanel panelCenter, panelBottom;
     private Dimension box;
     
@@ -70,6 +71,7 @@ public class Panel extends JPanel{
         
         solve = new JButton("Solve");
         generate = new JButton("Generate");
+        check = new JButton("Check");
         
         //Adding boxes
         boxes = new JTextField [9][9];
@@ -104,6 +106,7 @@ public class Panel extends JPanel{
         
         panelBottom.add(generate);
         panelBottom.add(solve);
+        panelBottom.add(check);
         
         this.add(panelCenter, BorderLayout.CENTER);
         this.add(panelBottom, BorderLayout.SOUTH);
@@ -116,8 +119,7 @@ public class Panel extends JPanel{
             {
             	logger.debug("Solve button pressed...");
             	
-            	logic.setSol(getBoxes());
-            	logic.solve();
+            	logic.solve(getBoxes());
         		setBoxes (logic.getSol(), false);
             }
         });
@@ -132,6 +134,22 @@ public class Panel extends JPanel{
                 logic.generate();
                 resetBoxes();
                 setBoxes (logic.getSol(), true);
+            }
+        });
+        
+        check.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+            	logger.debug("Check button pressed...");
+            	
+                if (logic.check(getBoxes())){
+                	JOptionPane.showMessageDialog(null, "Solution is valid!", "Success!", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                	JOptionPane.showMessageDialog(null, "Solution is wrong!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         
