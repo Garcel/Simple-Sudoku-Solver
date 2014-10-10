@@ -119,8 +119,8 @@ public class Panel extends JPanel{
             {
             	logger.debug("Solve button pressed...");
             	
-            	logic.solve(getBoxes());
-        		setBoxes (logic.getSol(), false);
+            	setBoxes (getBoxes(), true);
+            	setBoxes (logic.solve(getBoxes()), false);
             }
         });
         
@@ -171,6 +171,8 @@ public class Panel extends JPanel{
 	        			   boxes[i][j].setBackground(Color.cyan);
 	        	   }
 	           }
+		 
+		 repaint();
 	}
 	
 	private int [][] getBoxes(){
